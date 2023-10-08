@@ -1,4 +1,14 @@
-async function calcularRecurso(resource, amount, time) {
+/*
+
+<style TYPE="text/css">
+
+  @import url(https://brutus.finance/adds/boton-brutus.css);
+
+</style>
+
+*/
+
+async function calculate(resource, amount, time) {
 
     var ok = true;
 
@@ -9,27 +19,16 @@ async function calcularRecurso(resource, amount, time) {
     if (time.length >= 2) {
 
         if (parseInt(time[0]) < 1 || parseInt(time[0]) > 14) {
-            this.setState({
-                titulo: "Error Range",
-                body: "Please enter a range of values between 1 and 14 days"
-            })
-
+            
+            window.alert("error range")
             ok = false;
-
-            window.$("#mensaje-ebot").modal("show");
         }
     } else {
 
         if (parseInt(time[0]) !== 1) {
-            this.setState({
-                titulo: "Error Range",
-                body: "It is only available for 1 hour operations",
-                periodo: "1"
-            })
 
+            window.alert("error range")
             ok = false;
-
-            window.$("#mensaje-ebot").modal("show");
         }
 
     }
@@ -60,17 +59,17 @@ async function calcularRecurso(resource, amount, time) {
     }
 }
 
-async function compra() {
-    var precio = await this.calcularRecurso( "energy" ,"32000", "1h")
+async function buy() {
+    var precio = await calculate("energy", "32000", "1h")
     var account = window.tronWeb.trx.getAccount();
 
     var wallet_orden = tronWeb.address.fromHex(account.address)
-    
+
     var si = window.confirm("really buy " + "32000" + " Energy " + "1h" + " for " + precio + " TRX to " + wallet_orden + ", please sing the next transacction")
 
     if (si) {
 
-        var hash = await window.tronWeb.trx.sendTransaction("TMY...Send to your Wallet pre payed", window.tronWeb.toSun(this.state.precio));
+        var hash = await window.tronWeb.trx.sendTransaction("TMY...Send to your Wallet pre payed", window.tronWeb.toSun(precio));
 
         await delay(3);
 
@@ -82,7 +81,7 @@ async function compra() {
 
             if (hash.ret[0].contractRet === "SUCCESS") {
 
-                var url =  process.env.REACT_APP_BOT_URL + "energy"
+                var url = process.env.REACT_APP_BOT_URL + "energy"
 
                 var body = {
                     "id_api": process.env.REACT_APP_USER_ID,
@@ -119,7 +118,8 @@ async function compra() {
 
 return () => {
 
-    <div className="btn  btn-success text-white mb-2" onClick={() => this.compra()}>
-        BUY &nbsp; <i className="bi bi-bag"></i>
+    <div>
+        <button class="brutus-button" onClick={()=>buy()} title="Stop burning, rent energy and save TRX!">SAVE TRX </button>
+        <p class="brutus-div">Powered by: <a href="https://brutus.finance">Brutus.Finance <img height="15px" src="https://brutus.finance/images/favicon.png" alt="brutus" /></a> </p>
     </div>
 }
